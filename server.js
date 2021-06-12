@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+// Такой метод создания сервера будет нужен при работе с socket.io
 const server = require('http').Server(app);
 const next = require('next');
 
@@ -13,7 +14,7 @@ const handle = nextApp.getRequestHandler();
 
 const connectToDatabase = require('./utils-server/connect-db');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 
 app.use(express.json());
 connectToDatabase();

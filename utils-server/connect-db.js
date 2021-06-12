@@ -13,8 +13,6 @@ const connectToDatabse = async () => {
     console.log(error);
     process.exit(1);
   }
-
-  return client;
 };
 
 module.exports = connectToDatabse;

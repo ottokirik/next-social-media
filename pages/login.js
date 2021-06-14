@@ -1,5 +1,17 @@
+import {
+  HeaderMessage,
+  FooterMessage,
+} from 'components/common/welcome-message';
+import { LoginForm } from 'components/common/login-form';
+
 const Login = () => {
-  return <div>Login</div>;
+  return (
+    <>
+      <HeaderMessage />
+      <LoginForm />
+      <FooterMessage />
+    </>
+  );
 };
 
 export default Login;

@@ -14,7 +14,7 @@ const handle = nextApp.getRequestHandler();
 
 const connectToDatabase = require('./utils-server/connect-db');
 
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 connectToDatabase();

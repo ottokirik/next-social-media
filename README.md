@@ -8,7 +8,7 @@
 
 - Frontend: **NextJs, React hooks, nprogress, Semantic UI React**
 - Backend: **Express, Mongoose**
-- Utils: **Dotenv**
+- Utils: **Dotenv, Jsonwebtoken, Bcryptjs, Validator**
 - Dev: **Nodemon**
 
 [1]: https://www.udemy.com/course/mernstack-nextjs-withsocketio/ 'Курс на Udemy'

@@ -20,8 +20,8 @@ app.use(express.json());
 connectToDatabase();
 
 nextApp.prepare().then(() => {
-  app.use('/api/signup', require('api/signup'));
-  app.use('/api/auth', require('api/auth'));
+  app.use('/api/signup', require('./api/signup'));
+  app.use('/api/auth', require('./api/auth'));
   // Для работы роутинга nextjs
   app.all('*', (req, res) => handle(req, res));
 

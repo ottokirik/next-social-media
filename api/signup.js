@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('models/user-model');
-const Profile = require('models/profile-model');
-const Follower = require('models/follower-model');
+const User = require('../models/user-model');
+const Profile = require('../models/profile-model');
+const Follower = require('../models/follower-model');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -38,6 +38,85 @@ router.get('/:username', async (req, res) => {
 });
 
 // Создание пользователя
-router.post('/', async (req, res) => {});
+router.post('/', async (req, res) => {
+  const {
+    user: {
+      name,
+      email,
+      password,
+      bio,
+      facebook,
+      youtube,
+      twitter,
+      instagram,
+      username,
+    },
+  } = req.body;
+
+  if (!isEmail(email)) {
+    return res.status(401).send('Invalid Email');
+  }
+
+  if (password.length < 6) {
+    return res.status(401).send('Password must be at least 6 characters');
+  }
+
+  try {
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (user) {
+      return res.status(401).send('User already registered');
+    }
+
+    // Добавить проверку username
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      name,
+      email: email.toLowerCase(),
+      username: username.toLowerCase(),
+      password: hashedPassword,
+      profilePicUrl: req.body.profilePicUrl || userPng,
+    });
+
+    await newUser.save();
+
+    const profileFields = {};
+
+    profileFields.user = newUser._id;
+
+    profileFields.bio = bio;
+
+    profileFields.social = {};
+    if (facebook) profileFields.social.facebook = facebook;
+    if (youtube) profileFields.social.youtube = youtube;
+    if (instagram) profileFields.social.instagram = instagram;
+    if (twitter) profileFields.social.twitter = twitter;
+
+    await new Profile(profileFields).save();
+    await new Follower({
+      user: newUser._id,
+      followers: [],
+      following: [],
+    }).save();
+
+    const payload = { userId: newUser._id };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '2d' },
+      (err, token) => {
+        if (err) {
+          throw new Error(err.message);
+        }
+        res.send(200).json(token);
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;
